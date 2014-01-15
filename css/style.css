@@ -1,0 +1,95 @@
+body,
+html{
+	background-color: #EEE;
+	font-family: helvetica, arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+.carousel{
+	background-color: #FFF;
+	height: 400px;
+	margin: 40px auto;
+	padding: 0;
+	overflow: hidden;
+	position: relative;
+	width: 600px;
+}
+
+.carousel-wrapper{
+	left: 0;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: 0;
+}
+
+.carousel-item{
+	color: #FFF;
+	height: 400px;
+	line-height: 400px;
+	text-align: center;
+	width: 100%;
+}
+
+.carousel-next{
+	background-color: #FFF;
+	position: absolute;
+	left: 50%;
+	bottom: 20%;
+	height: 30px;
+	margin-left: -15px;
+	text-indent: -999px;
+	width: 30px;
+}
+
+.carousel-prev{
+	background-color: #FFF;
+	position: absolute;
+	left: 50%;
+	top: 20%;
+	height: 30px;
+	margin-left: -15px;
+	text-indent: -999px;
+	width: 30px;
+}
+
+.carousel-pager{
+	margin: 0;
+	top: 50%;
+	position: absolute;
+	right: 20px;
+	transform: translateY(-50%);
+		-webkit-transform: translateY(-50%);
+		-ms-transform: translateY(-50%);
+}
+
+.carousel-pager-item{
+	background-color: #FFF;
+	cursor: pointer;
+	height: 2px;
+	margin: 4px 0;
+	overflow: hidden;
+	text-indent:  -999px;
+	width: 30px;
+}
+
+.carousel-pager-active{
+	background-color: #000;
+}
+
+.one{
+	background: #F77C42;
+}
+
+.two{
+	background: #FCC760;
+}
+
+.three{
+	background-color: #914A3A;
+}
+
+.four{
+	background: #E6C89A;
+}
