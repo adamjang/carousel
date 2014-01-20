@@ -16,6 +16,7 @@
 						if ( options ) {
 							$.extend( settings, options );
 						}
+
 						
 						//carousel vars						
 						var $el 			= $(this),
@@ -33,6 +34,26 @@
 						var $pager          = $('.carousel-pager'),
 							$pagerItem      = 'carousel-pager-item',
 							$pagerActive    = 'carousel-pager-active';
+
+						//set data attr with itemHeight( this is set with css mediaqueries)
+						var setSlideH = function(){
+							$item.attr('data-height', $itemH);
+						}
+
+						//set the slide position to top of slide on resize
+						var setSlidePos = function(){
+							var current = $wrapper.children('li.' + $activeClass).index();
+							$wrapper.css('top', '-' + (current * $item.attr('data-height')) + 'px');
+						}
+
+						//update slide height on resize
+						var updateSlideHeight = function(){
+							$('.carousel-item').attr('data-height', $('.carousel-item').outerHeight(true));
+							setSlidePos();
+						}
+
+						updateSlideHeight();
+
 
 						//add active class to first slide
 						$item.first().addClass($activeClass);
@@ -60,17 +81,17 @@
 
 						//set slide first & last functions
 						var setSlideFirst = function(){
-							$wrapper.css('top', '-' + $itemH + 'px');
-							$item.eq(0).addClass($activeClass).siblings().removeClass($activeClass);
 							updatePagerActive(0);
+							$wrapper.css('top', '-' + $item.attr('data-height') + 'px');
+							$item.eq(0).addClass($activeClass).siblings().removeClass($activeClass);
 							console.log('SET FIRST');
 							//$item.eq(0).addClass($activeClass).siblings().removeClass($activeClass);
 						}
 
 						var setSlideLast = function(){
-							$wrapper.css('top', '-' + $itemH * $itemCount + 'px');
-							$item.eq($itemCount - 1).addClass($activeClass).siblings().removeClass($activeClass);
 							updatePagerActive($itemCount - 1);
+							$wrapper.css('top', '-' + $item.attr('data-height') * $itemCount + 'px');
+							$item.eq($itemCount - 1).addClass($activeClass).siblings().removeClass($activeClass);
 							console.log('SET LAST');
 						}
 
@@ -97,33 +118,41 @@
 						};
 
 						//go to slide
-						var goToSlide = function(current, slide){
+						var goToSlide = function(current, slide, speed){
 
 							//check if the wrapper is already animated (smoother animations)
 							if(!$wrapper.is(':animated')){
 								
 								console.log('slidefrom', current, 'to', slide);
 								
+								speed = speed || 1;
+
 								var dir;
 								var offset;
+								var setPager;
+								var newSpeed = settings.speed * speed;
+
 
 								if(current < slide){ //if next
 									dir = '-=';
-									offset = (slide - current) * $itemH;
+									offset = (slide - current) * $item.attr('data-height');
+									setPager = slide - 1;
 									$item.eq(slide - 1).addClass($activeClass).siblings().removeClass($activeClass);
-									updatePagerActive(slide - 1);
 								}else if(current > slide){ // if prev
 									dir = '+=';
-									offset = (current - slide) * $itemH;
+									offset = (current - slide) * $item.attr('data-height');
+									setPager = slide - 1;
 									$item.eq(slide - 1).addClass($activeClass).siblings().removeClass($activeClass);
-									updatePagerActive(slide - 1);
 								}else{ //if the same?
 									dir = '-=';
 									offset = 0;
+									setPager = 0;
 								}
 
+								updatePagerActive(setPager);
+
 								//animate the wrapper
-								$wrapper.stop().animate({ 'top' : dir + offset }, settings.speed, settings.easing, function(){
+								$wrapper.stop().animate({ 'top' : dir + offset }, newSpeed, settings.easing, function(){
 
 									if(getSlidePositionTop() == 'last'){
 										setSlideFirst();
@@ -137,6 +166,7 @@
 
 						};
 
+
 						//event - next
 						$next.bind('click', function(e){
 							e.preventDefault();
@@ -148,7 +178,8 @@
 							goToSlide(current, to);
 
 						});
-						
+					
+
 						//event - prev
 						$prev.bind('click', function(e){
 							e.preventDefault();
@@ -161,21 +192,28 @@
 
 						});
 
+
 						//event - pager
 						$('.' + $pagerItem).bind('click', function(e){
 							e.preventDefault();
 							
 							var current = $wrapper.children('li.' + $activeClass).index();
 							var to = $(this).index() + 1;
+							var speed = (current > to) ? current - to : to - current;
 
-							goToSlide(current, to);
+							goToSlide(current, to, speed);
 
 						});
+
+
+						//event - resize
+						$(window).bind("resize", updateSlideHeight);
 
 
 					});
 				}
 			}
+
 		};
 	
 	$.fn.carousel = function(method) {

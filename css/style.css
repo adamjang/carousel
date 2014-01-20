@@ -13,7 +13,7 @@ html{
 	padding: 0;
 	overflow: hidden;
 	position: relative;
-	width: 600px;
+	max-width: 1024px;
 }
 
 .carousel-wrapper{
@@ -92,4 +92,27 @@ html{
 
 .four{
 	background: #E6C89A;
+}
+
+@media only screen and (max-width: 768px) and (min-width: 481px) { 
+	.carousel{
+		height: 300px;
+	}
+
+	.carousel-item{
+		height: 300px;
+		line-height: 300px;
+	}
+
+}
+
+@media only screen and (max-width: 480px){
+	.carousel{
+		height: 200px;
+	}
+
+	.carousel-item{
+		height: 200px;
+		line-height: 200px;
+	}
 }
